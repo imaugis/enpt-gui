@@ -1,0 +1,115 @@
+# 00: taille de la fenêtre l,h. si pas défini -> plein écran
+# 01: ratio d'affichage des icones niveau 1, automatique si pas défini
+01:2.0
+
+# 10: répertoire thème
+10:/usr/share/enpt-gui/theme/
+
+# 11: thème dans le répertoire theme
+11:1/
+
+# 12: fond dans le répertoire theme
+12:enpt-1024x780.jpg
+
+# 20: fond bouton 1 non sélectionné
+20:20.png
+
+# 21: fond bouton 1 sélectionné
+21:21.png
+
+# 22: reflet bouton 1,x,y
+22:22.png,0,-37
+
+# 23: taille bouton 1  l,h,espace entre les boutons, pos y de l'icone dans le bouton
+23:136,164,10,-20
+
+# 26: taille et pos label 1 ligne  -> style police,x,y,l,h
+26:image: none; color: white; font-family: "arial"; font-size: 17px;,10,125,116,30
+
+# 27: taille et pos label 2 lignes -> style police,x1,y1,x2,y2,l,h
+27:image: none; color: white; font-family: "arial"; font-size: 13px;,10,122,10,137,116,20
+
+# 29: définition des boutons 1 -> logo, info-bulle,label1,label2
+#   39: définition des boutons 2 -> logo, info-bulle,label 1,label 2,commande
+29:1/icone-maths.png,,Mathématique,Géométrie,
+  39:2/a-nous-les-nombres.png,,À nous,les nombres,/usr/bin/anous
+  39:2/calcul-mental.png,,Calcul Mental,,/usr/bin/leterrier-calcul-mental
+  39:2/calculs.png,,Calculs,,/usr/bin/calculs
+  39:2/carmetal.png,,Carmetal,,carmetal
+  39:2/kig.png,,Kig,,kig
+  39:2/labyrinthe.png,,Labyrinthe,,/usr/bin/labyrinthe
+  39:2/ooo4kids-maths.png,,OOo4Kids,Maths,ooo4kids1.3 -math
+  39:2/operations.png,,Opérations,,/usr/bin/operations
+  39:2/tuxmaths.png,,TuxMaths,,/usr/games/tuxmath
+29:1/francais.png,,Français,,
+  39:2/aller.png,,Aller,,/usr/bin/aller
+  39:2/anki.png,,Anki,,anki %f
+  39:2/dicorime.png,,Dicorime,,dicorime
+  39:2/dictionnaire.png,,Dictionnaire,,stardict
+  39:2/gconjugo.png,,GConjugo,,/usr/bin/gconjugo
+  39:2/kanagram.png,,Kanagram,,kanagram
+  39:2/verbiste.png,,Verbiste,,verbiste
+29:1/histoire-geo.png,,Histoire,Géographie,
+  39:2/kgeography.png,,KGeography,,kgeography
+29:1/sciences.png,,Science,,
+  39:2/celestia.png,,Celestia,,celestia-gnome
+  39:2/kturtle.png,,Kturtle,,kturtle
+  39:2/stellarium.png,,Stellarium,,stellarium
+  39:2/sunclock.png,,Sunclock,,sunclock
+29:1/divers.png,,Autres,Matières,
+  39:2/childsplay.png,,Childsplay,,/usr/games/childsplay
+  39:2/gcompris.png,,GCompris,,/usr/games/gcompris
+  39:2/gnu-solfege.png,,Gnu-Solfege,,solfege
+  39:2/mulot.png,,Mulot,,/usr/bin/mulot
+  39:2/mypaint.png,,MyPaint,,mypaint %f
+  39:2/omnitux.png,,Omnitux,,/usr/bin/omnitux
+  39:2/ooo4kids-dessin.png,,OOo4Kids,Dessin,ooo4kids1.3 -draw
+  39:2/tuxpaint.png,,TuxPaint,,/usr/bin/tuxpaint
+  39:2/tuxtyping.png,,TuxTyping,,/usr/games/tuxtype
+29:1/internet.png,,Internet &,Messagerie,
+  39:/usr/share/pixmaps/thunderbird.png,,Thunderbird,,thunderbird
+  39:2/firefox.png,,Navigateur,Internet,/usr/bin/firefox
+29:1/bureautique.png,,Bureautique,,
+  39:2/tableur.png,,LibreOffice,Tableur,/usr/bin/libreoffice --calc %U
+  39:2/texte.png,,LibreOffice,Texte,/usr/bin/libreoffice --writer %U
+  39:2/diaporama.png,,LibreOffice,Présentation,/usr/bin/libreoffice --impress %U
+  39:2/evince.png,,Lecteur,PDF,/usr/bin/evince
+  39:2/ooo4kids-diaporama.png,,OOo4Kids,Diaporama,ooo4kids1.3 -impress
+  39:2/ooo4kids-tableur.png,,OOo4Kids,Tableau,ooo4kids1.3 -calc
+  39:2/ooo4kids-texte.png,,OOo4Kids,Texte,ooo4kids1.3 -writer
+29:1/outils.png,,Logiciels,Outils,
+  39:2/brasero.png,,Graveur de,CD-DVD,brasero
+  39:2/calculatrice.png,,Calculatrice,,gcalctool
+  39:2/capture-ecran.png,,Capture,d'écran,gnome-screenshot --interactive
+  39:2/dia.png,,Créateur de,Diagrammes,dia
+  39:2/enregistreur-son.png,,Enregistreur,de son,gnome-sound-recorder
+  39:/usr/share/icons/hicolor/scalable/apps/pinta.svg,,Éditeur,d'image,pinta
+  39:2/polices.png,,Table de,caractères,gucharmap
+  39:2/vlc.png,,Lecteur,Multimédia,/usr/bin/vlc
+  39:/usr/share/pixmaps/openshot.svg,,Montage,Vidéo,openshot %F
+  39:/usr/share/pixmaps/mandvd.png,,Créer,Des DVD,2ManDVD
+  39:/usr/share/icons/hicolor/48x48/apps/audacity.png,,Éditeur,Audio,audacity %F
+  39:/usr/share/icons/hicolor/48x48/apps/imagination.png,,Créer des,Diaporamas,imagination %F
+29:1/dossier.png,,Dossiers,Personnels,
+  39:2/mes-documents.png,,Documents,,/usr/bin/nautilus Documents/
+  39:2/mes-images.png,,Images,,/usr/bin/nautilus Images/
+  39:2/mes-musiques.png,,Musiques,,/usr/bin/nautilus Musique/
+  39:2/mes-videos.png,,Videos,,/usr/bin/nautilus Vidéos/
+
+# 30: fond bouton 2 non sélectionné
+30:40.png
+
+# 31: fond bouton 2 sélectionné
+31:41.png
+
+# 32: reflet bouton 2,x,y
+32:42.png,0,-27
+
+# 33: taille bouton 2: largeur,hauteur,espace entre les boutons, pos y de l'icone dans le bouton
+33:104,118,5,-15
+
+# 36: taille et pos label 1 ligne  -> style police,x,y,l,h
+36:image: none; color: white; font-weight: bold; font-family: "DejaVuSans"; font-size: 11px;,5,90,95,15
+
+# 37: taille et pos label 2 lignes -> style police,x1,y1,x2,y2,l,h
+37:image: none; color: white; font-weight: bold; font-family: "DejaVuSans"; font-size: 10px;,5,80,5,95,95,15

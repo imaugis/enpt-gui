@@ -1,0 +1,8 @@
+Package: enpt-gui
+Version: 0.6.1
+Section: education
+Priority: optional
+Architecture: all
+Depends: python-qt4, python (>= 2.7)
+Maintainer: WOOoinux <contact@imaugis.com>
+Description: Interface d'utilisation d'ENPT 2.0 adaptée à un usage TBI ou tablette tactile.
