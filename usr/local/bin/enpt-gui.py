@@ -18,19 +18,19 @@ d={29:[]}
 rep_theme = rep_theme1 = theme = fond = ''
 rep_config="/etc/enpt-gui/"
 #rep_config="./"
-tb1=[]				# tableau des boutons de type 1
-cwd=os.getcwd()			# chemin courant
-fondF2=None;			# menu 2
-fenetre_princ=None		# fenêtre de l'interface
+tb1=[]              # tableau des boutons de type 1
+cwd=os.getcwd()     # chemin courant
+fondF2=None         # menu 2
+fenetre_princ=None  # fenêtre de l'interface
 fconfig={'admin':'configAdmin.rc','enseignant':'configEnseignant.rc','eleve':'configEleve.rc'}	# dico des noms de fichier
 intitule={'admin':'administrateur','enseignant':'enseignant','eleve':'élève'}				# dico des intitulés
-modif=0				# variable qui indique qu'une modification a été faite dans l'interface courante
-dia=None			# boite de dialogue des bouton 1 ou 2
-diaout=None			# valeur de retour des boites de dialogue de modification des bouton 1 et 2
+modif=0             # variable qui indique qu'une modification a été faite dans l'interface courante
+dia=None            # boite de dialogue des bouton 1 ou 2
+diaout=None         # valeur de retour des boites de dialogue de modification des bouton 1 et 2
 
-Vide=1111			# constante utilisée dans les menu contextuels
+Vide=1111           # constante utilisée dans les menu contextuels
 
-def int1(s): # Convertit chaine en entier.
+def int1(s):        # Convertit chaine en entier.
     """Convertit chaine en entier."""
     try:
         ret = int(s)
@@ -39,7 +39,7 @@ def int1(s): # Convertit chaine en entier.
         ret = int(float(s))
     return ret
 
-def float1(s): # Convertit chaine en float.
+def float1(s):      # Convertit chaine en float.
     """Convertit chaine en float."""
     try:
         ret = float(s)
@@ -47,7 +47,7 @@ def float1(s): # Convertit chaine en float.
         ret = 0.0
     return ret
 
-def conv_conf(): # convertit le dictionnaire de config
+def conv_conf():    # convertit le dictionnaire de config
     """ convertit le dictionnaire de config """
     global rep_theme,rep_theme1,theme,fond
 # taille de la fenêtre
@@ -131,23 +131,23 @@ def conv_conf(): # convertit le dictionnaire de config
         B2.l2l =int1(d[37][5])
         B2.l2h =int1(d[37][6])
 
-def litConfig(fconfig):		# lit le fichier de config
-    f=open(rep_config+fconfig,'r')	# ouvre le fichier en lecture
-    while 1:				# boucle infinie
-        l=f.readline()				# lit une ligne
-        if l=='':				# si ligne vide, alors fin
+def litConfig(fconfig):             # lit le fichier de config
+    f=open(rep_config+fconfig,'r')  # ouvre le fichier en lecture
+    while 1:	                        # boucle infinie
+        l=f.readline()              # lit une ligne
+        if l=='':                   # si ligne vide, alors fin
             break
-        l=l.strip(' \n')			# retire le saut de ligne de fin de ligne
-        n=l[0:2]				# sépare les 2 premiers caractères
-        if n not in param: continue		# si les 2 caractères ne figurent pas dans la liste des paramètres, on ignore la ligne
-        c=l[3:].split(',')			# on split la ligne après le 3ème caractère, avec la virgule comme séparateur
-        n=int(n)				# convertit le numéro de paramètre en entier
-        if n==39:				# si c'est 39, c'est un bouton 2
-            d[29][-1].append(c)		# dans ce cas, on ajoute cette def à la liste des def de bouton 2 associées au dernier bouton 1
-        elif n==29:				# si c'est 29, il s'agit d'un bouton 1
-            d[29].append([]);			# création d'une nouvelle entrée bouton 1 dans la liste de def des boutons 1
-            d[29][-1].append(c);		# ajoute la def du bouton 1
-        else: d[n]=c				# sinon ajoute le paramètre et sa def dans le dico des paramètres
+        l=l.strip(' \n')            # retire le saut de ligne de fin de ligne
+        n=l[0:2]                    # sépare les 2 premiers caractères
+        if n not in param: continue # si les 2 caractères ne figurent pas dans la liste des paramètres, on ignore la ligne
+        c=l[3:].split(',')          # on split la ligne après le 3ème caractère, avec la virgule comme séparateur
+        n=int(n)                    # convertit le numéro de paramètre en entier
+        if n==39:                   # si c'est 39, c'est un bouton 2
+            d[29][-1].append(c)     # dans ce cas, on ajoute cette def à la liste des def de bouton 2 associées au dernier bouton 1
+        elif n==29:                 # si c'est 29, il s'agit d'un bouton 1
+            d[29].append([]);       # création d'une nouvelle entrée bouton 1 dans la liste de def des boutons 1
+            d[29][-1].append(c);    # ajoute la def du bouton 1
+        else: d[n]=c                # sinon ajoute le paramètre et sa def dans le dico des paramètres
     f.close()
     conv_conf()
 
@@ -159,7 +159,7 @@ def ecrit(f,val,*l):
     f.write(l[-1])
     f.write('\n')
 
-def sauve_config():		# écrit la configuration dans le fichier de config
+def sauve_config():                 # écrit la configuration dans le fichier de config
     global fconfig,interface,d,modif
     f=open(rep_config+fconfig[interface],'w')
 
@@ -229,45 +229,45 @@ def sauve_config():		# écrit la configuration dans le fichier de config
 
 #-----------------------------------------------------------------------------------------------
 
-class B1(QtGui.QWidget):	# boutons de niveau 1
-    size_x=size_y=0	# taille x et y
-    esp=0		# espace entre boutons
-    yicone=0		# position y de l'icone dans le bouton
-    refletx=reflety=0	# position du reflet dans le bouton
-    l1x=l1y=0		# position de la ligne de label quand ligne unique
-    l1l=l1h=0		# taille de la ligne de label quand ligne unique
-    l2x1=l2y1=0		# position de la ligne 1 de label quand 2 lignes de label
-    l2x2=l2y2=0		# position de la ligne 2 de label quand 2 lignes de label
-    l2h=l2l=0		# taille des lignes de label quand 2 lignes
-    sel=''		# image de fond du bouton quand bouton sélectionné
-    nsel=''		# image de fond du bouton quand bouton non sélectionné
-    reflet=''		# image de reflet du bouton
-    lstyle1=''		# style du label quand 1 ligne de label
-    lstyle2=''		# style du label quand 2 ligne de label
-    pasclicdroit1=0	# ni clic droit, ni Drop sur les icones B1 si != 0
+class B1(QtGui.QWidget): # boutons de niveau 1
+    size_x=size_y=0         # taille x et y
+    esp=0                   # espace entre boutons
+    yicone=0                # position y de l'icone dans le bouton
+    refletx=reflety=0       # position du reflet dans le bouton
+    l1x=l1y=0               # position de la ligne de label quand ligne unique
+    l1l=l1h=0               # taille de la ligne de label quand ligne unique
+    l2x1=l2y1=0             # position de la ligne 1 de label quand 2 lignes de label
+    l2x2=l2y2=0             # position de la ligne 2 de label quand 2 lignes de label
+    l2h=l2l=0               # taille des lignes de label quand 2 lignes
+    sel=''                  # image de fond du bouton quand bouton sélectionné
+    nsel=''                 # image de fond du bouton quand bouton non sélectionné
+    reflet=''               # image de reflet du bouton
+    lstyle1=''              # style du label quand 1 ligne de label
+    lstyle2=''              # style du label quand 2 ligne de label
+    pasclicdroit1=0         # ni clic droit, ni Drop sur les icones B1 si != 0
 
     def __init__(self,parent,li=None,b1=None):
         super(B1,self).__init__(parent)
-        self.hl=0		# (highlight) variable qui garde la trace de la mise en valeur du bouton
-        if li:				# a-t-on une définition d'un bouton ?
-            self.b1_=li				# on garde la liste des boutons 2 ainsi que le bouton 1 en local
-        self.setFixedSize(B1.size_x,B1.size_y)	# QWidget de fond du bouton
-        self.label1=self.label2=0		# initialisation des labels
-        if b1:				# si on a un bouton comme original
-            self.creer(b1.b1_[0])		# création du bouton
-            self.bouge(b1.x,b1.y)		# mise en place
-            self.highlight()			# mise en valeur
-        else:				# sinon création d'un bouton à partir de la définition
+        self.hl=0               # (highlight) variable qui garde la trace de la mise en valeur du bouton
+        if li:                  # a-t-on une définition d'un bouton ?
+            self.b1_=li         # on garde la liste des boutons 2 ainsi que le bouton 1 en local
+        self.setFixedSize(B1.size_x,B1.size_y)  # QWidget de fond du bouton
+        self.label1=self.label2=0               # initialisation des labels
+        if b1:                      # si on a un bouton comme original
+            self.creer(b1.b1_[0])   # création du bouton
+            self.bouge(b1.x,b1.y)   # mise en place
+            self.highlight()        # mise en valeur
+        else:                       # sinon création d'un bouton à partir de la définition
 #            self.l=self.b1_[0]
-            self.creer(self.b1_[0])		# création du bouton
-        if admin and B1.pasclicdroit1==0:		# si on est Admin et pas en édition
-            self.setAcceptDrops(True)			# le bouton 1 accepte les Drop
+            self.creer(self.b1_[0])         # création du bouton
+        if admin and B1.pasclicdroit1==0:   # si on est Admin et pas en édition
+            self.setAcceptDrops(True)       # le bouton 1 accepte les Drop
 
-    def contextMenuEvent(self, event):		# clic droit sur bouton B1 (QContextMenuEven)
+    def contextMenuEvent(self, event):      # clic droit sur bouton B1 (QContextMenuEven)
         global fondF2,admin
-        if not fondF2:				# si on n'a pas de sous-menu niveau 2
-            menu=QtGui.QMenu("Niveau 1", self)		# création du menu contextuel
-            if admin and B1.pasclicdroit1==0:		# si on est Admin et pas en édition
+        if not fondF2:                          # si on n'a pas de sous-menu niveau 2
+            menu=QtGui.QMenu("Niveau 1", self)  # création du menu contextuel
+            if admin and B1.pasclicdroit1==0:   # si on est Admin et pas en édition
                 modifAction = menu.addAction("Modification")
                 suppAction =  menu.addAction("Suppression") if len(tb1)>1                   else Vide
                 avantAction = menu.addAction("Avant")       if tb1.index(self)>0            else Vide
@@ -286,17 +286,17 @@ class B1(QtGui.QWidget):	# boutons de niveau 1
                 if action == rubriqueAction:
                     self.nouveauB2()
 
-    def dragEnterEvent(self,event):		# quand on passe en Drag sur le bouton 1
-        if not self.hl:				# si pas de highlight
-            self.w.setStyleSheet(self.sel)		# highlight
-        event.acceptProposedAction()		# on accepte l'événement
+    def dragEnterEvent(self,event):         # quand on passe en Drag sur le bouton 1
+        if not self.hl:                     # si pas de highlight
+            self.w.setStyleSheet(self.sel)  # highlight
+        event.acceptProposedAction()        # on accepte l'événement
 
-    def dragLeaveEvent(self,event):		# quand on sort du bouton en mode Drag
+    def dragLeaveEvent(self,event):         # quand on sort du bouton en mode Drag
         if self.hl:
-            self.w.setStyleSheet(self.nsel)	# on remet le bouton en normal
-        event.accept()				# on accepte l'événement
+            self.w.setStyleSheet(self.nsel) # on remet le bouton en normal
+        event.accept()                      # on accepte l'événement
 
-    def dropEvent(self,event):			# Drop
+    def dropEvent(self,event):              # Drop
         mimeData = event.mimeData()
         if mimeData.hasUrls():
             urlList = mimeData.urls()
@@ -306,24 +306,24 @@ class B1(QtGui.QWidget):	# boutons de niveau 1
             for i in range(0,imax):
                 url = urlList[i].path()
                 text += url;
-            b2=B2(None,self.litDrop(text))	# on crée un bouton 2 dans le vide
-            b2=rubrique2(b2)			# édition dudit bouton
-            if b2:				# si OK à la boite de dialogue
-                self.b1_.append(b2)		# rajoute le bouton 2 à la liste dur bouton 1 correspondant
-        event.acceptProposedAction()		# on accepte l'événement pour valider le Drop
+            b2=B2(None,self.litDrop(text))  # on crée un bouton 2 dans le vide
+            b2=rubrique2(b2)                # édition dudit bouton
+            if b2:                          # si OK à la boite de dialogue
+                self.b1_.append(b2)         # rajoute le bouton 2 à la liste dur bouton 1 correspondant
+        event.acceptProposedAction()        # on accepte l'événement pour valider le Drop
 
-    def testfile(self,name):		# teste si le fichier existe
+    def testfile(self,name):                # teste si le fichier existe
         file=QFile(name)
         # Si valid == true le fichier existe
         return file.exists()
 
-    def name2file(self,name):		# on a un nom d'icone et on doit retrouver le nom du fichier
+    def name2file(self,name):               # on a un nom d'icone et on doit retrouver le nom du fichier
 	n=""
-	if self.testfile(name):	# si l'icone existe avec ce nom, on retourne
+	if self.testfile(name):                 # si l'icone existe avec ce nom, on retourne
 	    return name;
-	nl= ["/usr/share/icons/hicolor/scalable/apps/"+name+".svg",		# liste des répertoires où sont les icones
-		"/usr/share/"+name+"/icons/"+name+".svg",			# on commence par les svg, puis les png
-		"/usr/share/app-install/icons/"+name+".svg",			#  de résolution de plus en plus faible
+	nl= ["/usr/share/icons/hicolor/scalable/apps/"+name+".svg",     # liste des répertoires où sont les icones
+		"/usr/share/"+name+"/icons/"+name+".svg",                   # on commence par les svg, puis les png
+		"/usr/share/app-install/icons/"+name+".svg",                # de résolution de plus en plus faible
 		"/usr/share/icons/Humanity/apps/48/"+name+".svg",
 		"/usr/share/icons/gnome/scalable/apps/"+name+".svg",
 		"/usr/share/app-install/icons/"+name+".png",
@@ -333,29 +333,29 @@ class B1(QtGui.QWidget):	# boutons de niveau 1
 		"/usr/share/icons/hicolor/48x48/apps/"+name+".png",
 		"/usr/share/icons/hicolor/32x32/apps/"+name+".png"]
 	for n in nl:
-	    if self.testfile(n):	# test en boucle
-		return n		# si le test est positif, on retourne le nom du fichier
-	return ""			# sinon on retourne une chaine vide
+	    if self.testfile(n):        # test en boucle
+		return n	                    # si le test est positif, on retourne le nom du fichier
+	return ""                       # sinon on retourne une chaine vide
 
-    def litDrop(self,nf):		# analyse du Drop (qui est un fichier Desktop)
-        r=["1/question.png","","","",""]	# définition vide d'un bouton 2
-        label=com=ico=""			# ni label, ni commande, ni icone
-        file=QFile(nf)				# création d'un QFile avec le nom du fichier
-        regName=QRegExp("^Name(\\[fr(_FR)?\\])?=")	# RegExp pour retrouver le français dans le fichier
-        regIcon=QRegExp("^Icon=")			# RegExp pour repérer l'icone
-        regcapIcon=QRegExp("Icon=(.*)")		# RegExp pour séparer l'icone
-        regExec=QRegExp("^Exec=")			# RegExp pour séparer la commande
+    def litDrop(self,nf):                   # analyse du Drop (qui est un fichier Desktop)
+        r=["1/question.png","","","",""]    # définition vide d'un bouton 2
+        label=com=ico=""                    # ni label, ni commande, ni icone
+        file=QFile(nf)                      # création d'un QFile avec le nom du fichier
+        regName=QRegExp("^Name(\\[fr(_FR)?\\])?=")  # RegExp pour retrouver le français dans le fichier
+        regIcon=QRegExp("^Icon=")           # RegExp pour repérer l'icone
+        regcapIcon=QRegExp("Icon=(.*)")     # RegExp pour séparer l'icone
+        regExec=QRegExp("^Exec=")           # RegExp pour séparer la commande
 
-        if not file.open(QIODevice.ReadOnly | QIODevice.Text):	# si on ne peut pas lire le fichier, on abandonne le Drop
+        if not file.open(QIODevice.ReadOnly | QIODevice.Text):  # si on ne peut pas lire le fichier, on abandonne le Drop
             return r
         en=QTextStream(file)
         while  not en.atEnd():
-            line = en.readLine();				# on lit une ligne
-            if line=="[Desktop Entry]":			# si on est dans un [Desktop Entry]
+            line = en.readLine();               # on lit une ligne
+            if line=="[Desktop Entry]":         # si on est dans un [Desktop Entry]
                 while not en.atEnd():
                     line = en.readLine()
-                    if line.startsWith("["):			# si on entre dans une autre rubrique
-                        file.close()				# fin du traitement
+                    if line.startsWith("["):    # si on entre dans une autre rubrique
+                        file.close()            # fin du traitement
                         return r
                     if line.contains(regName):
                         r[2]=line.split("=")[1]
@@ -371,27 +371,27 @@ class B1(QtGui.QWidget):	# boutons de niveau 1
         file.close()
         return r
 
-    def nouveauB2(self):		# action "Nouvelle rubrique"
+    def nouveauB2(self):        # action "Nouvelle rubrique"
         b=rubrique2()
         if b:
             self.b1_.append(b)
 
-    def suppression(self):		# action "Supression" du bouton
+    def suppression(self):      # action "Supression" du bouton
         global modif
         ret = QtGui.QMessageBox.question(self, "Suppression", "Voulez-vous vraiment\nsupprimer ce bouton ?", QtGui.QMessageBox.Cancel, QtGui.QMessageBox.Yes)
-        if ret == QtGui.QMessageBox.Yes:	# OK
-            nb1=tb1.index(self)		# retrouve le bouton dans le tableau global de boutons 1
+        if ret == QtGui.QMessageBox.Yes:    # OK
+            nb1=tb1.index(self)             # retrouve le bouton dans le tableau global de boutons 1
             max=len(tb1)-1
-            self.hide()				# cache le bouton
-            self.setParent(None)		# dissocie du parent
+            self.hide()                     # cache le bouton
+            self.setParent(None)            # dissocie du parent
             if nb1<max:
                 for i in range(max,nb1,-1):
-                    tb1[i].bouge(*tb1[i-1].pos())	# décale les boutons à l'écran
-            del(tb1[nb1])				# supprime le bouton
-            distribue()					# redistribue les boutons à l'écran
+                    tb1[i].bouge(*tb1[i-1].pos())	    # décale les boutons à l'écran
+            del(tb1[nb1])                   # supprime le bouton
+            distribue()                     # redistribue les boutons à l'écran
             modifie()
 
-    def inverse(self,a,b):		# inverse les icones a et b (sert aux fonctions "avant" et "apres")
+    def inverse(self,a,b):                  # inverse les icones a et b (sert aux fonctions "avant" et "apres")
         global modif
         # on bouge les icones
         posa=tb1[a].pos()
@@ -401,34 +401,34 @@ class B1(QtGui.QWidget):	# boutons de niveau 1
         tb1[a],tb1[b]=tb1[b],tb1[a]
         modifie()
 
-    def apres(self):			# déplace le bouton courant -> après
+    def apres(self):                        # déplace le bouton courant -> après
         a=tb1.index(self)
         b=a+1
         self.inverse(a,b)
 
-    def avant(self):			# déplace le bouton courant -> avant
+    def avant(self):                        # déplace le bouton courant -> avant
         a=tb1.index(self)
         b=a-1
         self.inverse(a,b)
 
-    def creer(self,l):			# création d'un bouton 1 avec la définition du bouton avec la liste dans 'l'
-        self.w=QtGui.QWidget(self)			# fond du bouton
-        self.w.setFixedSize(B1.size_x,B1.size_y)	# définit taille du bouton
-        self.w.setStyleSheet(self.nsel)		# image de fond du bouton
+    def creer(self,l):                              # création d'un bouton 1 avec la définition du bouton avec la liste dans 'l'
+        self.w=QtGui.QWidget(self)                  # fond du bouton
+        self.w.setFixedSize(B1.size_x,B1.size_y)    # définit taille du bouton
+        self.w.setStyleSheet(self.nsel)             # image de fond du bouton
 
-        self.ico=QtGui.QWidget(self)			# icone du bouton
+        self.ico=QtGui.QWidget(self)                # icone du bouton
         self.ico.setGeometry((B1.size_x-120)//2,self.yicone,120,B1.size_y)
         self.ico.setStyleSheet("QWidget {image: url(%s);}" % ((rep_theme if l[0][0]!='/' else '')+l[0]))
 
-        self.r=QtGui.QWidget(self)			# reflet
+        self.r=QtGui.QWidget(self)                  # reflet
         self.r.setFixedSize(B1.size_x,B1.size_y)
         self.r.setStyleSheet(self.reflet)
         self.r.move(self.refletx,self.reflety)
 
-        if l[2]:							# si on a un label
-            self.label1=QtGui.QLabel(l[2],self)			# création d'un label
-            self.label1.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)	# alignement du label
-            if l[3]:							# si on a un 2nd label
+        if l[2]:                                    # si on a un label
+            self.label1=QtGui.QLabel(l[2],self)     # création d'un label
+            self.label1.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)     # alignement du label
+            if l[3]:                                # si on a un 2nd label
                 self.label2=QtGui.QLabel(l[3],self)
                 self.label2.setStyleSheet(self.lstyle2)
                 self.label1.setStyleSheet(self.lstyle2)
@@ -437,102 +437,102 @@ class B1(QtGui.QWidget):	# boutons de niveau 1
                 self.label1.move(self.l2x1,self.l2y1)
                 self.label2.move(self.l2x2,self.l2y2)
                 self.label2.setAlignment(Qt.AlignHCenter)
-            else:							# on n'a qu'un label
+            else:                                   # on n'a qu'un label
                 self.label1.setStyleSheet(self.lstyle1.strip("'"))
                 self.label1.setFixedSize(self.l1l,self.l1h)
                 self.label1.move(self.l1x,self.l1y)
 
-    def bouge(self,x,y):			# bouge le bouton
+    def bouge(self,x,y):                            # bouge le bouton
         self.move(x,y)
         self.x=x; self.y=y
 
-    def enterEvent (self, event):		# on passe la souris au dessus
-        self.w.setStyleSheet(self.sel)			# highlight du fond
+    def enterEvent (self, event):                   # on passe la souris au dessus
+        self.w.setStyleSheet(self.sel)              # highlight du fond
 
-    def leaveEvent (self, event):		# la souris quitte le bouton
-        if not self.hl:				# si le bouton n'est pas en mode édition
-            self.w.setStyleSheet(self.nsel)		# retire le highlight
+    def leaveEvent (self, event):                   # la souris quitte le bouton
+        if not self.hl:                             # si le bouton n'est pas en mode édition
+            self.w.setStyleSheet(self.nsel)         # retire le highlight
 
-    def mouseReleaseEvent (self, event):	# relaché de clic de souris
+    def mouseReleaseEvent (self, event):            # relaché de clic de souris
         global fondF2
-        if event.button()==Qt.LeftButton:	# si clic gauche (normal)
-            if fondF2:				# si on a un menu 2
-                fondF2.setParent(None)			# délie le parent
-                fondF2=None				# détruit le menu 2
+        if event.button()==Qt.LeftButton:           # si clic gauche (normal)
+            if fondF2:                              # si on a un menu 2
+                fondF2.setParent(None)              # délie le parent
+                fondF2=None                         # détruit le menu 2
             else:
-                if len(self.b1_)>1:			# si on a au moins un bouton B2
-                    fondF2=F2(fenetre_princ,self)		# création d'un menu 2
+                if len(self.b1_)>1:                 # si on a au moins un bouton B2
+                    fondF2=F2(fenetre_princ,self)   # création d'un menu 2
                 else:					# sinon
-                    if len(self.b1_[0])>4 and self.b1_[0][4]:		# si commande pas vide
-                        fenetre_princ.curseur_wait()				# met le curseur d'attente
-                        QProcess.startDetached(self.b1_[0][4])		# exécute la commande
+                    if len(self.b1_[0])>4 and self.b1_[0][4]:   # si commande pas vide
+                        fenetre_princ.curseur_wait()            # met le curseur d'attente
+                        QProcess.startDetached(self.b1_[0][4])  # exécute la commande
 
-    def highlight(self):			# force et bloque le highlight du bouton, quand on ouvre un menu 2
-        self.w.setStyleSheet(self.sel)		# highlight du bouton
-        self.hl=1				# active le blocage du highlight
+    def highlight(self):                    # force et bloque le highlight du bouton, quand on ouvre un menu 2
+        self.w.setStyleSheet(self.sel)      # highlight du bouton
+        self.hl=1                           # active le blocage du highlight
 
-    def pos(self):				# retourne le tuple de la position du bouton
+    def pos(self):                          # retourne le tuple de la position du bouton
         return (self.x,self.y)
 #-----------------------------------------------------------------------------------------------
 
-class B2(QtGui.QWidget):	# boutons de niveau 2
-    size_x=size_y=0	# taille x et y
-    esp=0		# espace entre boutons
-    yicone=0		# position y de l'icone dans le bouton
-    refletx=reflety=0	# position du reflet dans le bouton
-    l1x=l1y=0		# position de la ligne de label quand ligne unique
-    l1l=l1h=0		# taille de la ligne de label quand ligne unique
-    l2x1=l2y1=0		# position de la ligne 1 de label quand 2 lignes de label
-    l2x2=l2y2=0		# position de la ligne 2 de label quand 2 lignes de label
-    l2h=l2l=0		# taille des lignes de label quand 2 lignes
-    sel=''		# image de fond du bouton quand bouton sélectionné
-    nsel=''		# image de fond du bouton quand bouton non sélectionné
-    reflet=''		# image de reflet du bouton
-    lstyle1=''		# style du label quand 1 ligne de label
-    lstyle2=''		# style du label quand 2 ligne de label
-    pasclicdroit2=0	# pas de clic droit sur les icones B2 si != 0
+class B2(QtGui.QWidget): # boutons de niveau 2
+    size_x=size_y=0         # taille x et y
+    esp=0                   # espace entre boutons
+    yicone=0                # position y de l'icone dans le bouton
+    refletx=reflety=0       # position du reflet dans le bouton
+    l1x=l1y=0               # position de la ligne de label quand ligne unique
+    l1l=l1h=0               # taille de la ligne de label quand ligne unique
+    l2x1=l2y1=0             # position de la ligne 1 de label quand 2 lignes de label
+    l2x2=l2y2=0             # position de la ligne 2 de label quand 2 lignes de label
+    l2h=l2l=0               # taille des lignes de label quand 2 lignes
+    sel=''                  # image de fond du bouton quand bouton sélectionné
+    nsel=''                 # image de fond du bouton quand bouton non sélectionné
+    reflet=''               # image de reflet du bouton
+    lstyle1=''              # style du label quand 1 ligne de label
+    lstyle2=''              # style du label quand 2 ligne de label
+    pasclicdroit2=0         # pas de clic droit sur les icones B2 si != 0
 
-    def __init__(self,parent,li):		# parent du bouton, li=liste de définition du bouton
-        super(B2,self).__init__(parent)	# initialisation du QWidget
-        if li: self.b2_=li			# on garde le bouton 2 en local
-        self.setFixedSize(B2.size_x,B2.size_y)	# dimensionne le widget support
-        self.label1=self.label2=0		# initialisation des labels
-        self.l=self.b2_[0]			# image d'icone de la commande
+    def __init__(self,parent,li):               # parent du bouton, li=liste de définition du bouton
+        super(B2,self).__init__(parent)         # initialisation du QWidget
+        if li: self.b2_=li                      # on garde le bouton 2 en local
+        self.setFixedSize(B2.size_x,B2.size_y)  # dimensionne le widget support
+        self.label1=self.label2=0               # initialisation des labels
+        self.l=self.b2_[0]                      # image d'icone de la commande
 #----widget de fond
-        self.w=QtGui.QWidget(self)		# fond du bouton
+        self.w=QtGui.QWidget(self)              # fond du bouton
         self.w.setFixedSize(B2.size_x,B2.size_y)
-        self.w.setStyleSheet(self.nsel)	# application du fond du bouton
+        self.w.setStyleSheet(self.nsel)         # application du fond du bouton
 #----widget d'icone
-        self.ico=QtGui.QWidget(self)		# icone du bouton
-        self.ico.setGeometry((B2.size_x-60)//2,self.yicone,60,B2.size_y)	# positionne l'icone dans le bouton
-        self.ico.setStyleSheet("QWidget {image: url("+(rep_theme if self.l[0]!='/' else '')+self.l+");}")	# applique l'image de l'icone
+        self.ico=QtGui.QWidget(self)            # icone du bouton
+        self.ico.setGeometry((B2.size_x-60)//2,self.yicone,60,B2.size_y)    # positionne l'icone dans le bouton
+        self.ico.setStyleSheet("QWidget {image: url("+(rep_theme if self.l[0]!='/' else '')+self.l+");}")   # applique l'image de l'icone
 #----widget de reflet
-        self.r=QtGui.QWidget(self)			# reflet
-        self.r.setFixedSize(B2.size_x,B2.size_y)	# dimensionne le reflet
-        self.r.setStyleSheet(self.reflet)		# applique l'image du reflet
-        self.r.move(self.refletx,self.reflety)		# déplace le reflet à sa place
+        self.r=QtGui.QWidget(self)                  # reflet
+        self.r.setFixedSize(B2.size_x,B2.size_y)    # dimensionne le reflet
+        self.r.setStyleSheet(self.reflet)           # applique l'image du reflet
+        self.r.move(self.refletx,self.reflety)      # déplace le reflet à sa place
 #----label
-        if self.l[2]:						# si on a un label
-            self.label1=QtGui.QLabel(self.b2_[2],self)				# lit la ligne 1
-            self.label1.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)	# centrage horizontal et vertical du label
-            if self.b2_[3]:					# si on a un 2nd label
-                self.label2=QtGui.QLabel(self.b2_[3],self)		# création le second label
-                self.label2.setStyleSheet(self.lstyle2)		# applique le style2 sur le 2nd label
-                self.label1.setStyleSheet(self.lstyle2)		# applique le style2 sur le 1er label
-                self.label1.setFixedSize(self.l2l,self.l2h)		# dimensionne les 2 lignes de label en taille2
+        if self.l[2]:                                       # si on a un label
+            self.label1=QtGui.QLabel(self.b2_[2],self)          # lit la ligne 1
+            self.label1.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter) # centrage horizontal et vertical du label
+            if self.b2_[3]:                                 # si on a un 2nd label
+                self.label2=QtGui.QLabel(self.b2_[3],self)      # création le second label
+                self.label2.setStyleSheet(self.lstyle2)         # applique le style2 sur le 2nd label
+                self.label1.setStyleSheet(self.lstyle2)         # applique le style2 sur le 1er label
+                self.label1.setFixedSize(self.l2l,self.l2h)     # dimensionne les 2 lignes de label en taille2
                 self.label2.setFixedSize(self.l2l,self.l2h)
-                self.label1.move(self.l2x1,self.l2y1)			# bouge les 2 lignes de label
+                self.label1.move(self.l2x1,self.l2y1)	           # bouge les 2 lignes de label
                 self.label2.move(self.l2x2,self.l2y2)
-                self.label2.setAlignment(Qt.AlignHCenter)		# centrage du 2nd label
-            else:						# on n'a qu'un label
-                self.label1.setStyleSheet(self.lstyle1.strip("'"))	# application du style 1 ligne de label
-                self.label1.setFixedSize(self.l1l,self.l1h)		# dimensionne la ligne unique
-                self.label1.move(self.l1x,self.l1y)			# positionne la ligne
+                self.label2.setAlignment(Qt.AlignHCenter)       # centrage du 2nd label
+            else:                                           # on n'a qu'un label
+                self.label1.setStyleSheet(self.lstyle1.strip("'"))  # application du style 1 ligne de label
+                self.label1.setFixedSize(self.l1l,self.l1h)         # dimensionne la ligne unique
+                self.label1.move(self.l1x,self.l1y)                 # positionne la ligne
 
-    def cache(self):				# cache le bouton
+    def cache(self):                # cache le bouton
         self.hide()
 
-    def bouge(self,x,y):			# déplace le bouton
+    def bouge(self,x,y):            # déplace le bouton
         self.move(x,y)
         self.x=x; self.y=y
 
