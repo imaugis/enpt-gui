@@ -356,7 +356,7 @@ class B1(QtGui.QWidget):      # boutons de niveau 1
 
     def litDrop(self, nf):                   # analyse du Drop (qui est un fichier Desktop)
         r = ["1/question.png", "", "", "", ""]    # définition vide d'un bouton 2
-        label = com = ico = ""                    # ni label, ni commande, ni icone
+        com = ""                              # ni label, ni commande, ni icone
         file = QFile(nf)                      # création d'un QFile avec le nom du fichier
         regName = QRegExp("^Name(\\[fr(_FR)?\\])?=")  # RegExp pour retrouver le français dans le fichier
         regIcon = QRegExp("^Icon=")           # RegExp pour repérer l'icone
