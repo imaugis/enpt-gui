@@ -5,8 +5,9 @@ import sys
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import *
 import os
+import grp
 import math
-import subprocess
+from shutil import copy
 
 from enpt_gui_db1 import Ui_Dialog1
 from enpt_gui_db2 import Ui_Dialog2
@@ -1004,7 +1005,10 @@ class dial2(QtGui.QDialog):    # boite de dialogue de création ou modification 
 
 #-----------------------------------------------------------------------------------------------
 def restaure():            # restaure le fichier de configuration de l'interface en cours
-    subprocess.call(['cp', rep_config + "sauve_config/" + fconfig[interface], rep_config + fconfig[interface]])
+    dest = os.path.join(rep_config, fconfig[interface])
+    if os.path.isfile(dest):
+        os.unlink(dest)
+    copy(os.path.join(rep_config, "sauve_config", fconfig[interface]), dest)
     config(interface)    # réaffiche l'interface
 
 
@@ -1042,7 +1046,7 @@ def elevconfig():    # commute vers l'interface Eleve
 def quel_groupe():
     global admin, enseignant, eleve
     enseignant, admin, eleve = 0, 0, 0
-    g = subprocess.check_output("groups").strip().split()
+    g = [grp.getgrgid(i)[0] for i in os.getgroups()]
     if "enseignant" in g:
         enseignant = 1
         ensconfig()
@@ -1051,7 +1055,7 @@ def quel_groupe():
         adminconfig()
     else:
         eleve = 1
-    config("eleve")
+        config("eleve")
 
 if __name__ == '__main__':
     app = QtGui.QApplication(sys.argv)        # création de l'application
