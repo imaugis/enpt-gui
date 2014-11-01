@@ -1010,10 +1010,13 @@ class dial2(QtGui.QDialog):    # boite de dialogue de création ou modification 
 #-----------------------------------------------------------------------------------------------
 def restaure():            # restaure le fichier de configuration de l'interface en cours
     dest = os.path.join(rep_config, fconfig[interface])
-    if os.path.isfile(dest):
-        os.unlink(dest)
-    copy(os.path.join(rep_config, "sauve_config", fconfig[interface]), dest)
-    config(interface)    # réaffiche l'interface
+    try:
+        if os.path.isfile(dest):
+            os.unlink(dest)
+        copy(os.path.join(rep_config, "sauve_config", fconfig[interface]), dest)
+        config(interface)    # réaffiche l'interface
+    except Exception, err:
+        QtGui.QMessageBox.warning(fenetre_princ, "Ecriture de la configure", "Impossible d'enregistrer le fichier : {0}".format(err), QtGui.QMessageBox.Close)
 
 
 def modifie():        # positionne la variable globale de modification et affiche un astérisque dans la barre de titre
