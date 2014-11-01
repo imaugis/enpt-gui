@@ -34,7 +34,7 @@ dia = None            # boite de dialogue des bouton 1 ou 2
 diaout = None         # valeur de retour des boites de dialogue de modification des bouton 1 et 2
 
 Vide = 1111           # constante utilisée dans les menu contextuels
-enseignant, admin, eleve = 0, 0, 0
+niveau_utilisateur = None
 interface = None
 
 
@@ -281,14 +281,14 @@ class B1(QtGui.QWidget):      # boutons de niveau 1
         else:                       # sinon création d'un bouton à partir de la définition
 #            self.l=self.b1_[0]
             self.creer(self.b1_[0])          # création du bouton
-        if admin and B1.pasclicdroit1 == 0:  # si on est Admin et pas en édition
+        if niveau_utilisateur == 'admin' and B1.pasclicdroit1 == 0:  # si on est Admin et pas en édition
             self.setAcceptDrops(True)        # le bouton 1 accepte les Drop
 
     def contextMenuEvent(self, event):       # clic droit sur bouton B1 (QContextMenuEven)
         global fondF2, admin
         if not fondF2:                            # si on n'a pas de sous-menu niveau 2
             menu = QtGui.QMenu("Niveau 1", self)  # création du menu contextuel
-            if admin and B1.pasclicdroit1 == 0:   # si on est Admin et pas en édition
+            if niveau_utilisateur == 'admin' and B1.pasclicdroit1 == 0:   # si on est Admin et pas en édition
                 modifAction = menu.addAction("Modification")
                 suppAction = menu.addAction("Suppression") if len(tb1) > 1 else Vide
                 avantAction = menu.addAction("Avant") if tb1.index(self) > 0 else Vide
@@ -578,7 +578,7 @@ class B2(QtGui.QWidget):      # boutons de niveau 2
 
     def contextMenuEvent(self, event):     # QContextMenuEvent # clic droit sur bouton B2
         global admin
-        if admin and B2.pasclicdroit2 == 0:        # si on est en admin et qu'on n'est pas en édition
+        if niveau_utilisateur == 'admin' and B2.pasclicdroit2 == 0:        # si on est en admin et qu'on n'est pas en édition
             menu = QtGui.QMenu("Niveau 2", self)            # création du menu contextuel
             modifAction = menu.addAction("Modification")
             suppAction = menu.addAction("Suppression")
@@ -771,19 +771,19 @@ class FenPrinc(QtGui.QMainWindow):    # fenêtre principale
         self.setCursor(Qt.ArrowCursor)
 
     def contextMenuEvent(self, event):    # clic droit sur fond (QContextMenuEvent)
-        if not eleve:                                # si on n'est pas élève
+        if not niveau_utilisateur == 'eleve':                                # si on n'est pas élève
             menu = QtGui.QMenu(self)                            # création menu contextuel
-            adminAction = menu.addAction("Admin") if admin else Vide            # si on est Admin, ajoute un item Admin
-            if admin and interface == "admin":
+            adminAction = menu.addAction("Admin") if niveau_utilisateur == 'admin' else Vide            # si on est Admin, ajoute un item Admin
+            if niveau_utilisateur == 'admin' and interface == "admin":
                 adminAction.setEnabled(False)        # si on est en interface Admin, l'item est grisé
             ensAction = menu.addAction("Enseignant")                    # ajoute l'item Enseignant
             elevAction = menu.addAction("Élève")                    # ajoute l'item Eleve
             menu.addSeparator()                            # un séparateur
-            saveAction = menu.addAction("Sauvegarder") if admin else Vide    # ajoute l'item Sauvegarder si on est Admin
-            if admin and not modif:
+            saveAction = menu.addAction("Sauvegarder") if niveau_utilisateur == 'admin' else Vide    # ajoute l'item Sauvegarder si on est Admin
+            if niveau_utilisateur == 'admin' and not modif:
                 saveAction.setEnabled(False)            # il est grisé si pas de modif
-            rstAction = menu.addAction("Restaurer") if admin else Vide    # ajoute l'item Restaurer si on est Admin
-            rubriqueAction = menu.addAction("Nouv. rubrique") if admin else Vide    # ajoute l'item Nouvelle Rubrique si on est Admin
+            rstAction = menu.addAction("Restaurer") if niveau_utilisateur == 'admin' else Vide    # ajoute l'item Restaurer si on est Admin
+            rubriqueAction = menu.addAction("Nouv. rubrique") if niveau_utilisateur == 'admin' else Vide    # ajoute l'item Nouvelle Rubrique si on est Admin
             action = menu.exec_(self.mapToGlobal(QPoint(event.x() + 3, event.y() + 3)))    # positionne le menu à 3 pixels vers la droite et en bas et l'exécute
             if action == adminAction:        # si on clique sur Admin
                 adminconfig()
@@ -1048,17 +1048,15 @@ def elevconfig():    # commute vers l'interface Eleve
 
 
 def quel_groupe():
-    global admin, enseignant, eleve
+    global niveau_utilisateur
     g = [grp.getgrgid(i)[0] for i in os.getgroups()]
-    if "enseignant" in g:
-        enseignant = 1
-        ensconfig()
-    elif "adm" in g:
-        admin = 1
-        adminconfig()
+    if "adm" in g:
+        niveau_utilisateur = 'admin'
+    elif "enseignant" in g:
+        niveau_utilisateur = 'enseignant'
     else:
-        eleve = 1
-        config("eleve")
+        niveau_utilisateur = 'eleve'
+    config(niveau_utilisateur)
 
 if __name__ == '__main__':
     app = QtGui.QApplication(sys.argv)        # création de l'application
