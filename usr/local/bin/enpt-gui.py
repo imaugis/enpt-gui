@@ -848,7 +848,7 @@ def rubrique2(b2=None):            # si none->nouveau, si b2 -> modif
 def distribue():        # redistribue les icones niveau 1 sur le fond
     global d        # config
     if 1 not in d:                # si ratio non défini dans le fichier de config
-        FenPrinc.ratio = float(sx) / float(sy)    # on calcule le ratio de l'écran
+        FenPrinc.ratio = float(FenPrinc.sx) / float(FenPrinc.sy)    # on calcule le ratio de l'écran
     nb1 = len(tb1)
     for nl in xrange(1, nb1 + 1):  # recherche le nombre de lignes
         if not float((B1.size_x + B1.esp) * int(nb1 / nl)) / (nl * (B1.size_y + B1.esp)) > FenPrinc.ratio:
