@@ -244,7 +244,7 @@ def sauve_config():                 # écrit la configuration dans le fichier de
     f.write("\n# 37: taille et pos label 2 lignes -> style police,x1,y1,x2,y2,l,h\n")
     ecrit(f, '37', B2.lstyle2, str(B2.l2x1), str(B2.l2y1), str(B2.l2x2), str(B2.l2y2), str(B2.l2l), str(B2.l2h))
 
-    f.close
+    f.close()
     modif = 0
     fenetre_princ.setWindowTitle(FenPrinc.titre)
 
