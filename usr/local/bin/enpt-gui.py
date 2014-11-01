@@ -802,7 +802,7 @@ class FenPrinc(QtGui.QMainWindow):    # fenêtre principale
 
 
 def rubrique(b1=None):            # si none->nouveau, si b1 -> modif
-    global dia, diaout, tb1, fenetre_princ
+    global dia, diaout, tb1
     B1.pasclicdroit1 = 1        # pour évider le drop vers B1 dans les boites de dialogue et le clic droit
     dia = dial1(b1)        # ouverture de la boite de dialogue
     dia.show()            # affichage de la boite
@@ -850,6 +850,8 @@ def distribue():        # redistribue les icones niveau 1 sur le fond
     if 1 not in d:                # si ratio non défini dans le fichier de config
         FenPrinc.ratio = float(FenPrinc.sx) / float(FenPrinc.sy)    # on calcule le ratio de l'écran
     nb1 = len(tb1)
+    if nb1 == 0:
+        nl = 1
     for nl in xrange(1, nb1 + 1):  # recherche le nombre de lignes
         if not float((B1.size_x + B1.esp) * int(nb1 / nl)) / (nl * (B1.size_y + B1.esp)) > FenPrinc.ratio:
             break
@@ -1033,9 +1035,17 @@ def config(i):        # détruit l'affichage courant et réaffiche la nouvelle i
         fenetre_princ = None        # destruction de la fenêtre principale
         modif = 0                # pas de modifications en cours
         interface = i            # modifie la variable globale interface
-        litConfig(fconfig[i])        # lecture du fichier de config
+        error = None
+        try:
+            litConfig(fconfig[i])        # lecture du fichier de config
+        except Exception, err:
+            error = err
         fenetre_princ = FenPrinc()    # création de la fenetre_princ
         fenetre_princ.montre()        # affichage de la fenetre_princ
+        if error:
+            QtGui.QMessageBox.warning(fenetre_princ, "Ouverture du fichier de configuration", "Impossible de charger le fichier de configuration : {0}".format(error), QtGui.QMessageBox.Close)
+            fenetre_princ.close()
+            sys.exit(1)
 
 
 def adminconfig():    # commute vers l'interface Admin
