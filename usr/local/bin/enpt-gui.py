@@ -712,9 +712,11 @@ class F2(QtGui.QWidget):    # fenêtre où se trouvent les boutons 2
         self.b1 = None
         self.hide()
         self.fond = None
-        B2.tb2 = []
+        if B2 is not None:
+            B2.tb2 = []
         fondF2 = None
-        B1.pasclicdroit1 = 0
+        if B1 is not None:
+            B1.pasclicdroit1 = 0
 
 
 #-----------------------------------------------------------------------------------------------
