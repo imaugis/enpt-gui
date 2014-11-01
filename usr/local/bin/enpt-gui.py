@@ -148,8 +148,8 @@ def conv_conf():    # convertit le dictionnaire de config
         B2.l2h = int1(d[37][6])
 
 
-def litConfig(fconfig):                  # lit le fichier de config
-    f = open(os.path.join(rep_config, fconfig), 'r')  # ouvre le fichier en lecture
+def litConfig(fconfig_):                  # lit le fichier de config
+    f = open(os.path.join(rep_config, fconfig_), 'r')  # ouvre le fichier en lecture
     for l in f.readlines():              # lit une ligne
         l = l.strip().rstrip()           # retire le saut de ligne de fin de ligne
         n = l[0:2]                       # sépare les 2 premiers caractères
@@ -176,8 +176,8 @@ def ecrit(f, val, *l):
 
 
 def sauve_config():                 # écrit la configuration dans le fichier de config
-    global fconfig, interface, d, modif
-    f = open(rep_config + fconfig[interface], 'w')
+    global modif
+    f = open(os.path.join(rep_config, fconfig[interface]), 'w')
 
     f.write('# 00: taille de la fenêtre l,h. si pas défini -> plein écran\n')
     if FenPrinc.sx != 0 and 0 in d:
@@ -1024,7 +1024,7 @@ def modifie():        # positionne la variable globale de modification et affich
 
 
 def config(i):        # détruit l'affichage courant et réaffiche la nouvelle interface
-    global fenetre_princ, tb1, d, interface, fconfig, modif
+    global fenetre_princ, tb1, d, interface, modif
     if not modif or QtGui.QMessageBox.warning(fenetre_princ, "Changement d'interface", "Vous allez quitter l'interface \"" + intitule[interface] + "\"\nalors que des modifications on eu lieu.\nVoulez-vous continuer ?", QtGui.QMessageBox.Cancel, QtGui.QMessageBox.Yes) == QtGui.QMessageBox.Yes:
         tb1 = []      # on détruit les boutons B1
         d = {29: []}   # on détruit le dictionnaire de config des boutons B1 et B2
