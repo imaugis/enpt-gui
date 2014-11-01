@@ -2,8 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import sys
-from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import *
+from PyQt4 import QtGui
+from PyQt4.QtCore import (QPoint, QString, QFile, QRegExp, QTextStream, Qt,
+                          QIODevice, QProcess, QTimer, SIGNAL, QLocale,
+                          QTranslator, QLibraryInfo, QTextCodec)
 import os
 import grp
 import math
@@ -32,6 +34,8 @@ dia = None            # boite de dialogue des bouton 1 ou 2
 diaout = None         # valeur de retour des boites de dialogue de modification des bouton 1 et 2
 
 Vide = 1111           # constante utilisée dans les menu contextuels
+enseignant, admin, eleve = 0, 0, 0
+interface = None
 
 
 def int1(s):        # Convertit chaine en entier.
@@ -1045,7 +1049,6 @@ def elevconfig():    # commute vers l'interface Eleve
 
 def quel_groupe():
     global admin, enseignant, eleve
-    enseignant, admin, eleve = 0, 0, 0
     g = [grp.getgrgid(i)[0] for i in os.getgroups()]
     if "enseignant" in g:
         enseignant = 1
