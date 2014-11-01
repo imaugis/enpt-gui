@@ -149,24 +149,19 @@ def conv_conf():    # convertit le dictionnaire de config
 
 
 def litConfig(fconfig):                  # lit le fichier de config
-    f = open(rep_config + fconfig, 'r')  # ouvre le fichier en lecture
-    while 1:                             # boucle infinie
-        l = f.readline()                 # lit une ligne
-        if l == '':                      # si ligne vide, alors fin
-            break
-        l = l.strip(' \n')               # retire le saut de ligne de fin de ligne
+    f = open(os.path.join(rep_config, fconfig), 'r')  # ouvre le fichier en lecture
+    for l in f.readlines():              # lit une ligne
+        l = l.strip().rstrip()           # retire le saut de ligne de fin de ligne
         n = l[0:2]                       # sépare les 2 premiers caractères
-        if n not in param:
-            continue                     # si les 2 caractères ne figurent pas dans la liste des paramètres, on ignore la ligne
-        c = l[3:].split(',')             # on split la ligne après le 3ème caractère, avec la virgule comme séparateur
-        n = int(n)                       # convertit le numéro de paramètre en entier
-        if n == 39:                      # si c'est 39, c'est un bouton 2
-            d[29][-1].append(c)          # dans ce cas, on ajoute cette def à la liste des def de bouton 2 associées au dernier bouton 1
-        elif n == 29:                    # si c'est 29, il s'agit d'un bouton 1
-            d[29].append([])            # création d'une nouvelle entrée bouton 1 dans la liste de def des boutons 1
-            d[29][-1].append(c)         # ajoute la def du bouton 1
-        else:
-            d[n] = c                     # sinon ajoute le paramètre et sa def dans le dico des paramètres
+        if n in param:
+            c = l[3:].split(',')         # on split la ligne après le 3ème caractère, avec la virgule comme séparateur
+            n = int(n)                   # convertit le numéro de paramètre en entier
+            if n == 29:                  # si c'est 29, il s'agit d'un bouton 1
+                d[29].append([c])        # création d'une nouvelle entrée bouton 1 dans la liste de def des boutons 1
+            elif n == 39:                # si c'est 39, c'est un bouton 2
+                d[29][-1].append(c)      # dans ce cas, on ajoute cette def à la liste des def de bouton 2 associées au dernier bouton 1
+            else:
+                d[n] = c                 # sinon ajoute le paramètre et sa def dans le dico des paramètres
     f.close()
     conv_conf()
 
