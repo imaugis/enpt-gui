@@ -844,13 +844,9 @@ def distribue():        # redistribue les icones niveau 1 sur le fond
     global d        # config
     if 1 not in d:                # si ratio non défini dans le fichier de config
         FenPrinc.ratio = float(sx) / float(sy)    # on calcule le ratio de l'écran
-    nl = 0
     nb1 = len(tb1)
-    while nl < nb1:
-        nl += 1
-        if float((B1.size_x + B1.esp) * int(nb1 / nl)) / (nl * (B1.size_y + B1.esp)) > FenPrinc.ratio:
-            continue
-        else:
+    for nl in xrange(1, nb1 + 1):  # recherche le nombre de lignes
+        if not float((B1.size_x + B1.esp) * int(nb1 / nl)) / (nl * (B1.size_y + B1.esp)) > FenPrinc.ratio:
             break
 
     nx = int(math.ceil((float(nb1)) / nl))                    # nbre de boutons en x
