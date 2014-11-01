@@ -335,9 +335,9 @@ class B1(QtGui.QWidget):      # boutons de niveau 1
         event.acceptProposedAction()        # on accepte l'événement pour valider le Drop
 
     def testfile(self, name):                # teste si le fichier existe
-        file = QFile(name)
+        qfile = QFile(name)
         # Si valid == true le fichier existe
-        return file.exists()
+        return qfile.exists()
 
     def name2file(self, name):               # on a un nom d'icone et on doit retrouver le nom du fichier
         nl = [name,
@@ -360,13 +360,14 @@ class B1(QtGui.QWidget):      # boutons de niveau 1
     def litDrop(self, nf):                   # analyse du Drop (qui est un fichier Desktop)
         r = ["1/question.png", "", "", "", ""]    # définition vide d'un bouton 2
         com = ""                              # ni label, ni commande, ni icone
-        file = QFile(nf)                      # création d'un QFile avec le nom du fichier
+        qfile = QFile(nf)                      # création d'un QFile avec le nom du fichier
         regName = QRegExp("^Name(\\[fr(_FR)?\\])?=")  # RegExp pour retrouver le français dans le fichier
         regIcon = QRegExp("^Icon=")           # RegExp pour repérer l'icone
         regcapIcon = QRegExp("Icon=(.*)")     # RegExp pour séparer l'icone
         regExec = QRegExp("^Exec=")           # RegExp pour séparer la commande
 
-        if not file.open(QIODevice.ReadOnly | QIODevice.Text):  # si on ne peut pas lire le fichier, on abandonne le Drop
+        if not qfile.open(QIODevice.ReadOnly | QIODevice.Text):  # si on ne peut pas lire le fichier, on abandonne le Drop
+            qfile.close()
             return r
         en = QTextStream(file)
         while not en.atEnd():
@@ -375,7 +376,7 @@ class B1(QtGui.QWidget):      # boutons de niveau 1
                 while not en.atEnd():
                     line = en.readLine()
                     if line.startsWith("["):    # si on entre dans une autre rubrique
-                        file.close()            # fin du traitement
+                        qfile.close()            # fin du traitement
                         return r
                     if line.contains(regName):
                         r[2] = line.split("=")[1]
@@ -389,7 +390,7 @@ class B1(QtGui.QWidget):      # boutons de niveau 1
                             while com.endsWith(' '):
                                 com.chop(1)
                         r[4] = com
-        file.close()
+        qfile.close()
         return r
 
     def nouveauB2(self):        # action "Nouvelle rubrique"
