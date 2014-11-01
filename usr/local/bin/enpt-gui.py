@@ -25,6 +25,9 @@ tb1 = []              # tableau des boutons de type 1
 cwd = os.getcwd()     # chemin courant
 fondF2 = None         # menu 2
 fenetre_princ = None  # fenêtre de l'interface
+groupe_admin = 'adm'
+groupe_enseignant = 'enseignant'
+
 fconfig = {'admin': 'configAdmin.rc', 'enseignant': 'configEnseignant.rc',
            'eleve': 'configEleve.rc'}  # dico des noms de fichier
 intitule = {'admin': 'administrateur', 'enseignant': 'enseignant',
@@ -1059,9 +1062,9 @@ def elevconfig():    # commute vers l'interface Eleve
 def quel_groupe():
     global niveau_utilisateur
     g = [grp.getgrgid(i)[0] for i in os.getgroups()]
-    if "adm" in g:
+    if groupe_admin in g:
         niveau_utilisateur = 'admin'
-    elif "enseignant" in g:
+    elif groupe_enseignant in g:
         niveau_utilisateur = 'enseignant'
     else:
         niveau_utilisateur = 'eleve'
