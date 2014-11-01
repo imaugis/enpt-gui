@@ -335,10 +335,8 @@ class B1(QtGui.QWidget):      # boutons de niveau 1
         return file.exists()
 
     def name2file(self, name):               # on a un nom d'icone et on doit retrouver le nom du fichier
-        n = ""
-        if self.testfile(name):                 # si l'icone existe avec ce nom, on retourne
-            return name
-        nl = ["/usr/share/icons/hicolor/scalable/apps/" + name + ".svg",     # liste des répertoires où sont les icones
+        nl = [name,
+              "/usr/share/icons/hicolor/scalable/apps/" + name + ".svg",     # liste des répertoires où sont les icones
               "/usr/share/" + name + "/icons/" + name + ".svg",                   # on commence par les svg, puis les png
               "/usr/share/app-install/icons/" + name + ".svg",                # de résolution de plus en plus faible
               "/usr/share/icons/Humanity/apps/48/" + name + ".svg",
