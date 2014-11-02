@@ -23,7 +23,6 @@ rep_theme = rep_theme1 = theme = ''
 rep_config = "/etc/enpt-gui/"
 #rep_config="./"
 tb1 = []              # tableau des boutons de type 1
-cwd = os.getcwd()     # chemin courant
 fondF2 = None         # menu 2
 fenetre_princ = None  # fenêtre de l'interface
 groupe_admin = 'adm'
@@ -555,10 +554,17 @@ class B1(QtGui.QWidget):  # boutons de niveau 1
                 else:                    # sinon
                     # si commande pas vide
                     if len(self.b1_[0]) > 4 and self.b1_[0][4]:
-                        # met le curseur d'attente
-                        fenetre_princ.curseur_wait()
                         # exécute la commande
-                        QProcess.startDetached(self.b1_[0][4])
+                        retval = QProcess.startDetached(self.b1_[0][4])
+                        if retval:  # met le curseur d'attente
+                            fenetre_princ.curseur_wait()
+                        else:
+                            msg = "Erreur au lancement de la commande.\n"\
+                                "Cette application n'est peut être pas installée."
+                            titre = "Exécution de la commande",
+                            QtGui.QMessageBox.warning(fenetre_princ, titre,
+                                                      msg,
+                                                      QtGui.QMessageBox.Close)
 
     def highlight(self):   # force et bloque le highlight du bouton,
                            #quand on ouvre un menu 2
@@ -662,9 +668,16 @@ class B2(QtGui.QWidget):   # boutons de niveau 2
         # si on relache la souris et qu'on n'est pas en cours
         # d'édition de bouton
         if event.button() == Qt.LeftButton and not dia:
-            fenetre_princ.curseur_wait()  # met le curseur d'attente
-            QProcess.startDetached(self.b2_[4],)    # exécute la commande
+            # exécute la commande
+            retval = QProcess.startDetached(self.b2_[4])
+            if retval:
+                fenetre_princ.curseur_wait()  # met le curseur d'attente
             fondF2.detruit()              # suppression du menu 2
+            if not retval:
+                msg = "Erreur au lancement de la commande.\n"\
+                      "Cette application n'est peut être pas installée."
+                QtGui.QMessageBox.warning(fenetre_princ, "Exécution de la commande",
+                                          msg, QtGui.QMessageBox.Close)
 
     # QContextMenuEvent # clic droit sur bouton B2
     def contextMenuEvent(self, event):
