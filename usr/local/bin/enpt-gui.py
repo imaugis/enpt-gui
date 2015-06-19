@@ -137,7 +137,7 @@ def litConfig(fconfig):             # lit le fichier de config
         l=f.readline()              # lit une ligne
         if l=='':                   # si ligne vide, alors fin
             break
-        l=l.strip(' \n')            # retire le saut de ligne de fin de ligne
+        l=l.strip(' \n')            # retire le saut de ligne et les espaces bout de ligne
         n=l[0:2]                    # sépare les 2 premiers caractères
         if n not in param: continue # si les 2 caractères ne figurent pas dans la liste des paramètres, on ignore la ligne
         c=l[3:].split(',')          # on split la ligne après le 3ème caractère, avec la virgule comme séparateur
