@@ -25,8 +25,11 @@ rep_config = "/etc/enpt-gui/"
 tb1 = []              # tableau des boutons de type 1
 fondF2 = None         # menu 2
 fenetre_princ = None  # fenêtre de l'interface
-groupe_admin = 'adm'
-groupe_enseignant = 'enseignant'
+groupe_admin = ['adm','admin','administrateur','administrator']
+groupe_enseignant = ['enseignant','professeurs','enseignant','professeur','prof','profs']
+delta_t,delta_b,delta_l,delta_r = 20,20,0,0	# zones non couvertes par
+						# l'interface afin de garder la main sur les menus
+pidfile = "/tmp/enpt-gui.lock"
 
 fconfig = {'admin': 'configAdmin.rc', 'enseignant': 'configEnseignant.rc',
            'eleve': 'configEleve.rc'}  # dico des noms de fichier
@@ -875,9 +878,11 @@ class FenPrinc(QtGui.QMainWindow):    # fenêtre principale
     ratio = 0  # ratio de l'écran (calculé ou pris dans le fichier de config)
     fond = ''  # fond de la fenêtre
     titre = ''  # titre de la fenêtre
+    delta = 30
 
     def __init__(self):
         global modif            # témoin de modif
+        global delta_t,delta_b,delta_l,delta_r  # retraits de l'interface dans le desktop
         super(FenPrinc, self).__init__()    # initialisation de QMainWindow
         modif = 0                    # pas de modif
         FenPrinc.titre = 'Enpt-Gui'  # def du titre de la fenêtre
@@ -886,22 +891,20 @@ class FenPrinc(QtGui.QMainWindow):    # fenêtre principale
         self.setStatusBar(None)        # suppression de la barre de status
         # si pas de définition de taille de fenêtre dans le fichier de config
         if 0 not in d:
-            # on enlève les décors
-            self.setWindowFlags(Qt.FramelessWindowHint)
-            self.setWindowState(Qt.WindowFullScreen)  # on passe en plein écran
-            self.setStyleSheet("background:transparent;")   # pas de fond
-            self.setStyleSheet("image: none")      # pas d'image de fond
-            self.setAttribute(Qt.WA_X11NetWmWindowTypeDesktop)
-            self.setAttribute(Qt.WA_TranslucentBackground)        # transparent
-            self.setGeometry(QtGui.QApplication.desktop().screenGeometry())
-            # lecture de la taille d'écran
-            ecran = QtGui.QApplication.desktop().screenGeometry()
-            FenPrinc.sx = ecran.width()                    # largeur d'écran
-            FenPrinc.sy = ecran.height()                # hauteur d'écran
+            self.setWindowFlags(Qt.FramelessWindowHint)       # on enlève les décors
+            self.setStyleSheet("background:transparent;")     # pas de fond
+            self.setStyleSheet("image: none")
+            self.setAttribute(Qt.WA_TranslucentBackground)    # transparent
+            ecran=QtGui.QApplication.desktop().screenGeometry()
+            self.setFixedSize( ecran.width()-delta_l-delta_r,ecran.height()-delta_t-delta_b)
+            FenPrinc.sx=ecran.width()-delta_l-delta_r;          # largeur d'écran
+            FenPrinc.sy=ecran.height()-delta_t-delta_b;         # hauteur d'écran[/b]
+            self.move(delta_l,delta_t)
+            print(self.winId().__int__())
+
         else:                        # si oui
             # fixe la taille de la fenêtre avec celle donnée dans le fichier
-            # de config apose une image de image de fond si elle a été
-            # définie
+            # de config apose une image de fond si elle a été définie
             self.setFixedSize(self.sx, self.sy)
             self.setStyleSheet("QMainWindow {image: url("
                                + (rep_theme if FenPrinc.fond[0] != '/' else '')
@@ -909,12 +912,16 @@ class FenPrinc(QtGui.QMainWindow):    # fenêtre principale
         for b1 in d[29]:           # lecture des def de boutons 1
             tb1.append(B1(self, li=b1))  # céation des boutons
         distribue()                # ditribution des boutons
+        self.setFocusPolicy(Qt.StrongFocus)
 
-    def __del__(self):        # cache le bouton
+    def __del__(self):        # cache la fenêtre
         self.hide()
 
-    def montre(self):        # montre le bouton
+    def montre(self):        # montre la fenêtre
         self.show()
+        print('show')
+        s="wmctrl -i -r {} -b add,below".format(self.winId().__int__())
+        print s
 
     def curseur_wait(self):    # affiche un curseur d'attente
         self.setCursor(Qt.WaitCursor)   # sélection du curseur d'attente
@@ -979,6 +986,14 @@ class FenPrinc(QtGui.QMainWindow):    # fenêtre principale
             elif action == rubriqueAction:
                 rubrique()
 
+    def focusInEvent(self, event):  # au moment où la fenêtre prend le focus
+        global interface
+        if interface != 'admin':   # si on n'est pas admin
+            id=self.winId().__int__()       # lit l'id de la fenêtre
+            os.system("wmctrl -i -r {} -b remove,below".format(id))
+            # passe la fenêtre en fond d'écran
+            os.system("wmctrl -i -r {} -b add,below".format(id))
+            
 
 def rubrique(b1=None):            # si none->nouveau, si b1 -> modif
     global dia
@@ -1295,9 +1310,13 @@ def elevconfig():    # commute vers l'interface Eleve
 def quel_groupe():
     global niveau_utilisateur
     groups = [grp.getgrgid(i)[0] for i in os.getgroups()]
-    if groupe_admin in groups:
+
+
+    #if groupe_admin in groups:
+    if any(i in groups for i in groupe_admin):
         niveau_utilisateur = 'admin'
-    elif groupe_enseignant in groups:
+    #elif groupe_enseignant in groups:
+    elif any(i in groups for i in groupe_enseignant):
         niveau_utilisateur = 'enseignant'
     else:
         niveau_utilisateur = 'eleve'
@@ -1306,6 +1325,7 @@ def quel_groupe():
 
 def main():
     """main loop"""
+    global pidfile
     app = QtGui.QApplication(sys.argv)  # création de l'application
     # passage de qt en utf-8 par défaut
     QTextCodec.setCodecForCStrings(QTextCodec.codecForName("UTF-8"))
@@ -1316,8 +1336,27 @@ def main():
                     QLibraryInfo.location(QLibraryInfo.TranslationsPath))
     app.installTranslator(translator)
     quel_groupe()           # vérification du groupe de l'utilisateur courant
-    sys.exit(app.exec_())   # exécution de l'interface
+    resultat = app.exec_()
+    os.unlink(pidfile)
+    sys.exit(resultat)      # exécution de l'interface
+
+
+def checkPidRunning(pid):        
+    '''Teste l'existence d'un PID'''
+    try:
+        os.kill(pid, 0)
+    except OSError:
+        return False
+    else:
+        return True
 
 
 if __name__ == '__main__':
+    pid = str(os.getpid())
+    if os.path.isfile(pidfile) and checkPidRunning(int(file(pidfile,'r').readlines()[0])):
+        print "Enpt-gui tourne déjà"
+        sys.exit()
+    else:
+        file(pidfile, 'w').write(pid)
     main()
+    os.unlink(pidfile)
