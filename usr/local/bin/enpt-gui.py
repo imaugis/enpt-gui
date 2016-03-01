@@ -1311,11 +1311,8 @@ def quel_groupe():
     global niveau_utilisateur
     groups = [grp.getgrgid(i)[0] for i in os.getgroups()]
 
-
-    #if groupe_admin in groups:
     if any(i in groups for i in groupe_admin):
         niveau_utilisateur = 'admin'
-    #elif groupe_enseignant in groups:
     elif any(i in groups for i in groupe_enseignant):
         niveau_utilisateur = 'enseignant'
     else:
@@ -1336,14 +1333,17 @@ def main():
                     QLibraryInfo.location(QLibraryInfo.TranslationsPath))
     app.installTranslator(translator)
     quel_groupe()           # vérification du groupe de l'utilisateur courant
-    resultat = app.exec_()
+    resultat = app.exec_()  # exécution de l'interface
+    # après l'exécution, détruction du fichier du PID
     os.unlink(pidfile)
-    sys.exit(resultat)      # exécution de l'interface
+    sys.exit(resultat)
 
 
 def checkPidRunning(pid):        
     '''Teste l'existence d'un PID'''
     try:
+        # si on lance un kill avec signal 0 à un pid existant, il ne se
+        # passe rien. Sinon, exception OSError
         os.kill(pid, 0)
     except OSError:
         return False
@@ -1352,11 +1352,12 @@ def checkPidRunning(pid):
 
 
 if __name__ == '__main__':
-    pid = str(os.getpid())
+    pid = str(os.getpid())      # lecture du PID du programme
+    # test si l'interface est déjà en cours d'exécution
     if os.path.isfile(pidfile) and checkPidRunning(int(file(pidfile,'r').readlines()[0])):
         print "Enpt-gui tourne déjà"
         sys.exit()
     else:
+        # écrit le PID du programme
         file(pidfile, 'w').write(pid)
     main()
-    os.unlink(pidfile)
